@@ -180,10 +180,7 @@ const data = {
       category: "Full Stack",
     },
   ],
-  
-  
-  
-  
+
   contactInfo: {
     email: import.meta.env.VITE_CONTACT_EMAIL,
     phone: import.meta.env.VITE_CONTACT_PHONE,
