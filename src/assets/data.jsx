@@ -188,7 +188,6 @@ const data = {
     email: import.meta.env.VITE_CONTACT_EMAIL,
     phone: import.meta.env.VITE_CONTACT_PHONE,
     linkedin: import.meta.env.VITE_CONTACT_LINKEDIN,
-    instagram: import.meta.env.VITE_CONTACT_INSTAGRAM,
     github: import.meta.env.VITE_CONTACT_GITHUB,
   },
   skills: [

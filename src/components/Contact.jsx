@@ -4,7 +4,6 @@ import {
   FaEnvelope,
   FaLinkedin,
   FaPhone,
-  FaInstagramSquare,
 } from "react-icons/fa";
 
 import { db } from "../firbase";
@@ -85,16 +84,6 @@ const Contact = () => {
                 aria-label="LinkedIn"
               >
                 <FaLinkedin className="text-xl" />
-              </a>
-            )}
-            {contactInfo.instagram && (
-              <a
-                href={contactInfo.instagram}
-                target="_blank"
-                className="flex items-center justify-center w-12 h-12 rounded-full bg-white text-[#4D8685] shadow-md hover:bg-[#0A1817] hover:text-[#F0DB4F] transition-all"
-                aria-label="Instagram"
-              >
-                <FaInstagramSquare className="text-xl" />
               </a>
             )}
           </div>
