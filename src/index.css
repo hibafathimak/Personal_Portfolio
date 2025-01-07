@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Poppins:wght@600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* body {
+  font-family: 'Fira Sans', sans-serif;
+  color: white;
+
+}
+h1, h2, h3 {
+  font-family: 'Poppins', sans-serif;
+  color: white;
+
+} */
+
+h1, h2, h3 {
+  font-family: 'Manrope', sans-serif;
+  color: white;
+
+}
+body {
+  font-family: 'Ubuntu', sans-serif;
+  color: white;
+}
+
+/* Smooth scrolling for the container */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Customize the scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0A1817; /* Dark background color for the track */
+}
+
+
+::-webkit-scrollbar-thumb {
+  background: #4d8685; /* Scrollbar thumb color */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #376b6a; /* Thumb hover color */
+}
+
