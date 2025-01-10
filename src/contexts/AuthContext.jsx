@@ -3,23 +3,21 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  // Check sessionStorage on initial load to see if user is authenticated
   const [isAuthenticated, setIsAuthenticated] = useState(
-    sessionStorage.getItem("isAuthenticated") === "true" // Get value from sessionStorage
+    sessionStorage.getItem("isAuthenticated") === "true"
   );
 
   const login = () => {
-    sessionStorage.setItem("isAuthenticated", "true"); // Store authentication state in sessionStorage
+    sessionStorage.setItem("isAuthenticated", "true"); 
     setIsAuthenticated(true);
   };
 
   const logout = () => {
-    sessionStorage.removeItem("isAuthenticated"); // Remove from sessionStorage on logout
+    sessionStorage.removeItem("isAuthenticated"); 
     setIsAuthenticated(false);
   };
 
   useEffect(() => {
-    // Check the session storage when the component mounts
     const storedAuthState = sessionStorage.getItem("isAuthenticated");
     if (storedAuthState) {
       setIsAuthenticated(storedAuthState === "true");
