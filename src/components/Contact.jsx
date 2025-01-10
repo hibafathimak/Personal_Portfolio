@@ -6,10 +6,9 @@ import {
   FaPhone,
 } from "react-icons/fa";
 
-import { db } from "../firbase";
-import { collection, addDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import data from "../assets/data";
+import { sendMessageAPI } from "../services/allAPI";
 
 const Contact = () => {
   const { contactInfo } = data; 
@@ -18,7 +17,7 @@ const Contact = () => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const messageCollection = collection(db, "userMessages");
+  
 
   const sendMessage = async (e) => {
     e.preventDefault();
@@ -29,12 +28,12 @@ const Contact = () => {
 
     setLoading(true);
     try {
-      await addDoc(messageCollection, {
+      const response = await sendMessageAPI({
         name,
         email,
         message,
-      });
-      toast.success("Message sent successfully!");
+    });
+      if(response.status==200) {toast.success(response.data);}
       setName("");
       setEmail("");
       setMessage("");
@@ -47,10 +46,10 @@ const Contact = () => {
   };
 
   return (
-    <div className="mx-10 md:mx-20 my-20 flex flex-col items-center">
+    <div className="mx-4 sm:mx-8 my-20 flex flex-col items-center" >
       <h1 className="text-center text-3xl font-bold mb-8">Connect With Me</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-[600px] w-[85%] md:w-[70%]">
-        <div className="bg-[#4D8685] rounded-tl-3xl rounded-bl-3xl p-8 flex flex-col items-center justify-center text-white text-lg font-medium">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full lg:w-[80%] lg:h-[600px] ">
+        <div className="bg-[#4D8685] rounded-tl-3xl rounded-bl-3xl p-4 sm:p-8 flex flex-col items-center justify-center text-white text-lg font-medium">
           <h2 className="text-3xl font-bold mb-6">Let's Connect</h2>
           <p className="text-center mb-8">
             Feel free to reach out if you're looking for a developer, have a
@@ -61,7 +60,7 @@ const Contact = () => {
               <a
                 href={`mailto:${contactInfo.email}`}
                 target="_blank"
-                className="flex items-center justify-center w-12 h-12 rounded-full bg-white text-[#4D8685] shadow-md hover:bg-[#0A1817] hover:text-[#F0DB4F] transition-all"
+                className="flex items-center justify-center w-12 h-12 rounded-full bg-white text-[#4D8685] shadow-md hover:bg-[#0A1817] hover:text-white"
                 aria-label="Email"
               >
                 <FaEnvelope className="text-xl" />
@@ -70,7 +69,7 @@ const Contact = () => {
             {contactInfo.phone && (
               <a
                 href={`tel:${contactInfo.phone}`}
-                className="flex items-center justify-center w-12 h-12 rounded-full bg-white text-[#4D8685] shadow-md hover:bg-[#0A1817] hover:text-[#F0DB4F] transition-all"
+                className="flex items-center justify-center w-12 h-12 rounded-full bg-white text-[#4D8685] shadow-md hover:bg-[#0A1817] hover:text-white"
                 aria-label="Phone"
               >
                 <FaPhone className="text-xl" />
@@ -80,7 +79,7 @@ const Contact = () => {
               <a
                 href={contactInfo.linkedin}
                 target="_blank"
-                className="flex items-center justify-center w-12 h-12 rounded-full bg-white text-[#4D8685] shadow-md hover:bg-[#0A1817] hover:text-[#F0DB4F] transition-all"
+                className="flex items-center justify-center w-12 h-12 rounded-full bg-white text-[#4D8685] shadow-md hover:bg-[#0A1817] hover:text-white"
                 aria-label="LinkedIn"
               >
                 <FaLinkedin className="text-xl" />
@@ -89,7 +88,7 @@ const Contact = () => {
           </div>
         </div>
 
-        <div className="border rounded-tr-3xl rounded-br-3xl p-8 shadow-lg flex flex-col justify-center">
+        <div className="border rounded-tr-3xl rounded-br-3xl p-4 sm:p-8 shadow-lg flex flex-col justify-center">
           <h2 className="text-center text-2xl font-semibold mb-6">
             Write A Message
           </h2>

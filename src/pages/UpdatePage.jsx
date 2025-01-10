@@ -1,168 +1,262 @@
-import React, { useState } from 'react';
-import { FaUserEdit, FaCalendarAlt, FaCode, FaBriefcase, FaEnvelope } from 'react-icons/fa';
+import React, { useState, useEffect } from 'react';
+import { FaUpload } from 'react-icons/fa';
+import { addProjectAPI, getAllProjectsAPI, deleteProjectAPI, updateProjectAPI } from '../services/allAPI';
+import SERVER_URL from '../services/serverUrl';
 
-const UpdatePage = () => {
-  // Initial data for editing
-  const [userInfo, setUserInfo] = useState({
-    name: "Hiba Fathima K",
-    email: "hibafathima0502@gmail.com",
+const Projects = () => {
+  const [projects, setProjects] = useState([]);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [preview, setPreview] = useState("");
+  const [imageFileStatus, setImageFileStatus] = useState(false);
+
+  const [projectDetails, setProjectDetails] = useState({
+    id: "",
+    name: "",
+    description: "",
+    technologies: "",
+    category: "",
+    image: "",
+    sourceCode: "",
+    liveDemoLink: "",
   });
 
-  const [skills, setSkills] = useState([
-    { name: "React", level: "Advanced", progress: 85 },
-    { name: "Node.js", level: "Intermediate", progress: 70 },
-    { name: "Python", level: "Advanced", progress: 90 },
-  ]);
+  // Fetch all projects on load
+  useEffect(() => {
+    const fetchProjects = async () => {
+      const response = await getAllProjectsAPI();
+      setProjects(response.data);
+    };
+    fetchProjects();
+  }, []);
 
-  const [upcomingDeadlines, setUpcomingDeadlines] = useState([
-    { task: "Finish E-commerce Platform Frontend", deadline: "January 10, 2025" },
-    { task: "Complete Documentation for Portfolio Website", deadline: "January 15, 2025" },
-    { task: "Prepare for React Interview", deadline: "January 20, 2025" },
-  ]);
+  // Handle Add Project
+  const handleAddProject = async () => {
+    const { name, description, technologies, category, image, sourceCode, liveDemoLink } = projectDetails;
+    if (name && description && technologies && category && image && sourceCode && liveDemoLink) {
+      const reqBody = new FormData();
+      reqBody.append("name", name);
+      reqBody.append("description", description);
+      reqBody.append("technologies", technologies);
+      reqBody.append("category", category);
+      reqBody.append("image", image);
+      reqBody.append("sourceCode", sourceCode);
+      reqBody.append("liveDemoLink", liveDemoLink);
 
-  // Handle user input changes
-  const handleUserInfoChange = (e) => {
-    const { name, value } = e.target;
-    setUserInfo((prev) => ({ ...prev, [name]: value }));
+      try {
+        const result = await addProjectAPI(reqBody);
+        if (result.status === 200) {
+          alert("Project added successfully!");
+          fetchProjects(); // Refresh project list
+          handleCloseAddModal();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      alert("Please fill in all the fields.");
+    }
   };
 
-  const handleSkillChange = (index, e) => {
-    const { name, value } = e.target;
-    const updatedSkills = [...skills];
-    updatedSkills[index][name] = value;
-    setSkills(updatedSkills);
+  // Handle Edit Project
+  const handleEditProject = async () => {
+    const { id, name, description, technologies, category, image, sourceCode, liveDemoLink } = projectDetails;
+    if (name && description && technologies && category && sourceCode && liveDemoLink) {
+      const reqBody = new FormData();
+      reqBody.append("name", name);
+      reqBody.append("description", description);
+      reqBody.append("technologies", technologies);
+      reqBody.append("category", category);
+      image && reqBody.append("image", image); // Only append if there's a new image
+      reqBody.append("sourceCode", sourceCode);
+      reqBody.append("liveDemoLink", liveDemoLink);
+
+      try {
+        const result = await updateProjectAPI(id, reqBody);
+        if (result.status === 200) {
+          alert("Project updated successfully!");
+          fetchProjects(); // Refresh project list
+          handleCloseEditModal();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      alert("Please fill in all the fields.");
+    }
   };
 
-  const handleDeadlineChange = (index, e) => {
-    const { name, value } = e.target;
-    const updatedDeadlines = [...upcomingDeadlines];
-    updatedDeadlines[index][name] = value;
-    setUpcomingDeadlines(updatedDeadlines);
+  // Handle Delete Project
+  const handleDeleteProject = async (id) => {
+    try {
+      const result = await deleteProjectAPI(id);
+      if (result.status === 200) {
+        alert("Project deleted successfully!");
+        fetchProjects(); // Refresh project list
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Logic to save updated info (e.g., API call)
-    console.log("Updated Information:", { userInfo, skills, upcomingDeadlines });
+  // Image validation and preview
+  useEffect(() => {
+    if (projectDetails.image && (projectDetails.image.type === "image/jpg" || projectDetails.image.type === "image/jpeg" || projectDetails.image.type === "image/png")) {
+      setImageFileStatus(true);
+      setPreview(URL.createObjectURL(projectDetails.image));
+    } else {
+      setImageFileStatus(false);
+      setPreview("");
+      setProjectDetails({ ...projectDetails, image: "" });
+    }
+  }, [projectDetails.image]);
+
+  // Modal close functions
+  const handleCloseAddModal = () => {
+    setShowAddModal(false);
+    setProjectDetails({ name: "", description: "", technologies: "", category: "", image: "", sourceCode: "", liveDemoLink: "" });
+  };
+  const handleCloseEditModal = () => {
+    setShowEditModal(false);
+    setProjectDetails({ name: "", description: "", technologies: "", category: "", image: "", sourceCode: "", liveDemoLink: "" });
+  };
+
+  // Show Add Project Modal
+  const handleShowAddModal = () => setShowAddModal(true);
+
+  // Show Edit Project Modal
+  const handleShowEditModal = (project) => {
+    setShowEditModal(true);
+    setProjectDetails(project);
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-8">
+    <div className="min-h-screen bg-[#0A1817] text-white p-8">
       <div className="max-w-7xl mx-auto">
-        <div className="bg-gray-800 p-6 shadow-lg rounded-lg">
-          <h1 className="text-3xl font-bold mb-4">Update Profile</h1>
+        <h1 className="text-3xl font-bold mb-8">Projects</h1>
 
-          {/* Update User Info Section */}
-          <form onSubmit={handleSubmit} className="space-y-8">
-            <div>
-              <h2 className="text-lg font-semibold mb-4 flex items-center">
-                <FaUserEdit className="w-5 h-5 mr-2" />
-                Personal Information
-              </h2>
-              <div className="space-y-4">
-                <div>
-                  <label htmlFor="name" className="text-sm font-medium">Name</label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={userInfo.name}
-                    onChange={handleUserInfoChange}
-                    className="mt-2 w-full p-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
-                    placeholder="Enter your name"
-                    required
-                  />
-                </div>
-                <div>
-                  <label htmlFor="email" className="text-sm font-medium">Email</label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={userInfo.email}
-                    onChange={handleUserInfoChange}
-                    className="mt-2 w-full p-3 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
-                    placeholder="Enter your email"
-                    required
-                  />
-                </div>
+        {/* New Project Button */}
+        <div className="mb-4">
+          <button onClick={handleShowAddModal} className="bg-[#5DA49B] text-white py-2 px-4 rounded-full flex items-center">
+            <i className="fa-solid fa-plus mr-2"></i> New Project
+          </button>
+        </div>
+
+        {/* Add Modal */}
+        {showAddModal && (
+          <div className="fixed inset-0 flex justify-center items-center bg-gray-500 bg-opacity-50">
+            <div className="bg-[#0A1817] p-8 rounded-lg w-1/2">
+              <h2 className="text-xl font-bold mb-4">Add New Project</h2>
+              <div className="mb-3">
+                <label className="block mb-2">Project Image</label>
+                <input
+                  type="file"
+                  onChange={(e) => setProjectDetails({ ...projectDetails, image: e.target.files[0] })}
+                  className="hidden"
+                  id="uploadFile"
+                />
+                <label htmlFor="uploadFile" className="cursor-pointer border-2 border-dashed border-gray-400 p-4 w-full text-center">
+                  {preview ? (
+                    <img src={preview} alt="preview" className="h-48 w-full object-cover" />
+                  ) : (
+                    <FaUpload className="text-3xl text-gray-400" />
+                  )}
+                </label>
+                {!imageFileStatus && (
+                  <div className="text-red-500 text-center mt-2">* Upload only jpeg, jpg, png files</div>
+                )}
+              </div>
+              <div className="mb-3">
+                <input
+                  className="form-control p-2 w-full"
+                  value={projectDetails.name}
+                  onChange={(e) => setProjectDetails({ ...projectDetails, name: e.target.value })}
+                  type="text"
+                  placeholder="Project Name"
+                />
+              </div>
+              <div className="mb-3">
+                <input
+                  className="form-control p-2 w-full"
+                  value={projectDetails.description}
+                  onChange={(e) => setProjectDetails({ ...projectDetails, description: e.target.value })}
+                  type="text"
+                  placeholder="Project Description"
+                />
+              </div>
+              <div className="mb-3">
+                <input
+                  className="form-control p-2 w-full"
+                  value={projectDetails.technologies}
+                  onChange={(e) => setProjectDetails({ ...projectDetails, technologies: e.target.value })}
+                  type="text"
+                  placeholder="Technologies Used"
+                />
+              </div>
+              <div className="mb-3">
+                <input
+                  className="form-control p-2 w-full"
+                  value={projectDetails.category}
+                  onChange={(e) => setProjectDetails({ ...projectDetails, category: e.target.value })}
+                  type="text"
+                  placeholder="Project Category"
+                />
+              </div>
+              <div className="mb-3">
+                <input
+                  className="form-control p-2 w-full"
+                  value={projectDetails.sourceCode}
+                  onChange={(e) => setProjectDetails({ ...projectDetails, sourceCode: e.target.value })}
+                  type="text"
+                  placeholder="Project Source Code Link"
+                />
+              </div>
+              <div className="mb-3">
+                <input
+                  className="form-control p-2 w-full"
+                  value={projectDetails.liveDemoLink}
+                  onChange={(e) => setProjectDetails({ ...projectDetails, liveDemoLink: e.target.value })}
+                  type="text"
+                  placeholder="Live Demo Link"
+                />
+              </div>
+              <div className="flex justify-between">
+                <button onClick={handleAddProject} className="bg-[#5DA49B] text-white py-2 px-4 rounded-full">
+                  Add Project
+                </button>
+                <button onClick={handleCloseAddModal} className="bg-red-500 text-white py-2 px-4 rounded-full">
+                  Cancel
+                </button>
               </div>
             </div>
+          </div>
+        )}
 
-            {/* Skills Section */}
-            <div>
-              <h2 className="text-lg font-semibold mb-4 flex items-center">
-                <FaCode className="w-5 h-5 mr-2" />
-                Skills Progress
-              </h2>
-              <div className="space-y-4">
-                {skills.map((skill, index) => (
-                  <div key={index} className="space-y-2">
-                    <div className="flex justify-between">
-                      <span className="font-medium">{skill.name}</span>
-                      <span className="text-gray-400 text-sm">{skill.level}</span>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <input
-                        type="number"
-                        name="progress"
-                        value={skill.progress}
-                        onChange={(e) => handleSkillChange(index, e)}
-                        className="w-20 p-2 bg-gray-600 rounded-lg text-white"
-                        placeholder="Progress"
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Upcoming Deadlines Section */}
-            <div>
-              <h2 className="text-lg font-semibold mb-4 flex items-center">
-                <FaCalendarAlt className="w-5 h-5 mr-2" />
-                Upcoming Deadlines
-              </h2>
-              <div className="space-y-4">
-                {upcomingDeadlines.map((deadline, index) => (
-                  <div key={index} className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <input
-                        type="text"
-                        name="task"
-                        value={deadline.task}
-                        onChange={(e) => handleDeadlineChange(index, e)}
-                        className="w-1/2 p-3 bg-gray-700 rounded-lg text-white"
-                        placeholder="Task"
-                      />
-                      <input
-                        type="text"
-                        name="deadline"
-                        value={deadline.deadline}
-                        onChange={(e) => handleDeadlineChange(index, e)}
-                        className="w-1/2 p-3 bg-gray-700 rounded-lg text-white"
-                        placeholder="Deadline"
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Save Changes Button */}
-            <div className="flex justify-center">
+        {/* Display Projects */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {projects.map((project) => (
+            <div key={project._id} className="bg-[#0A1817] border border-gray-700 rounded-lg p-6">
+              <img src={`${SERVER_URL}/uploads/${project.image}`} alt="project" className="h-48 w-full object-cover mb-4 rounded-md" />
+              <h3 className="text-2xl font-bold text-white">{project.name}</h3>
+              <p className="text-gray-400 mb-4">{project.description}</p>
               <button
-                type="submit"
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                onClick={() => handleShowEditModal(project)}
+                className="bg-[#5DA49B] text-white py-2 px-4 rounded-full mr-2"
               >
-                Save Changes
+                Edit
+              </button>
+              <button
+                onClick={() => handleDeleteProject(project._id)}
+                className="bg-red-500 text-white py-2 px-4 rounded-full"
+              >
+                Delete
               </button>
             </div>
-          </form>
+          ))}
         </div>
       </div>
     </div>
   );
 };
 
-export default UpdatePage;
+export default Projects;

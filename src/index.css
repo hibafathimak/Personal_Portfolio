@@ -51,3 +51,8 @@ html {
   background: #376b6a; /* Thumb hover color */
 }
 
+input.pw {
+  -webkit-text-security: disc;
+}
+
+

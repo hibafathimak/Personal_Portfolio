@@ -10,14 +10,19 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@gsap/react": "^2.1.1",
+    "@react-spring/web": "^9.7.5",
     "aos": "^2.3.4",
+    "axios": "^1.7.9",
     "dotenv": "^16.4.7",
     "firebase": "^11.1.0",
+    "gsap": "^3.12.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-icons": "^5.4.0",
     "react-router-dom": "^7.1.1",
     "react-toastify": "^11.0.2",
+    "split-type": "^0.3.4",
     "swiper": "^11.2.0"
   },
   "devDependencies": {
