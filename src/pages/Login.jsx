@@ -13,11 +13,9 @@ const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-
-    
     if (email === import.meta.env.VITE_LOGIN_EMAIL && password === import.meta.env.VITE_LOGIN_PASSWORD) 
       {
-        login()
+      login()
       toast.success("Login successful!");
       navigate("/dashboard"); 
     } else {
@@ -62,7 +60,6 @@ const Login = () => {
             />
           </div>
 
-          {/* Login Button */}
           <button
             type="submit"
             className="w-full mt-4 bg-[#4D8685] py-2 rounded-lg text-white font-medium hover:bg-[#376B6A] transition-all"

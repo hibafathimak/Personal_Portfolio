@@ -18,7 +18,6 @@ const NavBar = () => {
           <img
             src={logo}
             className="rounded-full h-12 lg:h-14"
-            alt="Brand Logo - Hiba Fathima's Personal Website"
           />
         </Link>
         <button

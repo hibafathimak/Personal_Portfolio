@@ -8,7 +8,6 @@ const EditSkills = () => {
 
   const categories = ["Frontend", "Backend", "Tools", "Soft Skills"];
 
-  // Fetch skills from API
   useEffect(() => {
     const fetchSkills = async () => {
       try {
@@ -24,7 +23,6 @@ const EditSkills = () => {
     fetchSkills();
   }, []);
 
-  // Handle skill input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewSkill((prev) => ({
@@ -33,18 +31,16 @@ const EditSkills = () => {
     }));
   };
 
-  // Add a new skill
   const handleAddSkill = () => {
     if (newSkill.name && newSkill.category) {
       setSkills((prev) => [
         ...prev,
         { id: Date.now(), name: newSkill.name, category: newSkill.category, level: newSkill.level },
       ]);
-      setNewSkill({ name: "", category: "", level: 50 }); // Reset input fields
+      setNewSkill({ name: "", category: "", level: 50 }); 
     }
   };
 
-  // Remove an existing skill
   const handleDeleteSkill = async (id) => {
     try {
       const response = await deleteSkillAPI(id);
@@ -56,12 +52,10 @@ const EditSkills = () => {
     }
   };
 
-  // Update skill level
   const handleEditSkill = async (id, level) => {
     try {
       const response = await updateSkillLevelAPI(id, { level });
       if (response.status === 200) {
-        // Update the state with the updated level
         setSkills((prev) =>
           prev.map((skill) => (skill._id === id ? { ...skill, level } : skill))
         );
@@ -76,9 +70,59 @@ const EditSkills = () => {
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold mb-6">Edit Skills</h1>
 
-        {/* Skill List */}
+        <div className="bg-[#0A1817] border p-6 shadow-lg rounded-lg mb-8">
+  <h2 className="text-lg font-semibold mb-4">Add a New Skill</h2>
+  <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4 w-full">
+    <div className="flex space-x-4 w-full md:w-1/2">
+      <input
+        type="text"
+        name="name"
+        placeholder="Skill Name"
+        value={newSkill.name}
+        onChange={handleInputChange}
+        className="w-full px-4 py-2 bg-gray-700 text-white rounded focus:outline-none"
+      />
+      <input
+        type="number"
+        name="level"
+        min="0"
+        max="100"
+        value={newSkill.level}
+        onChange={handleInputChange}
+        className="w-20 px-2 py-2 bg-gray-700 text-white rounded"
+      />
+    </div>
+    <div className="flex space-x-4 w-full md:w-1/2">
+      <select
+        name="category"
+        value={newSkill.category}
+        onChange={handleInputChange}
+        className="w-full px-2 py-2 bg-gray-700 text-white rounded"
+      >
+        <option value="">Select Category</option>
+        {categories.map((cat) => (
+          <option key={cat} value={cat}>
+            {cat}
+          </option>
+        ))}
+      </select>
+
+      <button
+        onClick={handleAddSkill}
+        className="flex items-center px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+      >
+        <FaPlus className="mr-2" size={18} />
+        Add
+      </button>
+    </div>
+  </div>
+</div>
+
+
+
         <div className="bg-[#0A1817] border p-6 shadow-lg rounded-lg">
           <h2 className="text-lg font-semibold mb-4">Your Skills</h2>
+
           <div className="space-y-4">
             {skills.map((skill) => (
               <div
@@ -92,12 +136,12 @@ const EditSkills = () => {
                 </div>
                 <div className="flex items-center space-x-4">
                   <input
-                    type="range"
+                    type="number"
                     min="0"
                     max="100"
                     value={skill.level}
                     onChange={(e) => handleEditSkill(skill._id, Number(e.target.value))}
-                    className="w-32"
+                    className="w-14 px-2 py-2 bg-gray-700 text-white rounded"
                   />
                   <button
                     onClick={() => handleDeleteSkill(skill._id)}
@@ -108,51 +152,6 @@ const EditSkills = () => {
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-
-        {/* Add New Skill */}
-        <div className="bg-[#0A1817] border p-6 shadow-lg rounded-lg mt-8">
-          <h2 className="text-lg font-semibold mb-4">Add a New Skill</h2>
-          <div className="flex items-center space-x-4">
-            <input
-              type="text"
-              name="name"
-              placeholder="Skill Name"
-              value={newSkill.name}
-              onChange={handleInputChange}
-              className="w-full px-4 py-2 bg-gray-700 text-white rounded focus:outline-none"
-            />
-            <select
-              name="category"
-              value={newSkill.category}
-              onChange={handleInputChange}
-              className="w-1/3 px-2 py-2 bg-gray-700 text-white rounded"
-            >
-              <option value="">Select Category</option>
-              {categories.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
-              ))}
-            </select>
-            <input
-              type="range"
-              name="level"
-              min="0"
-              max="100"
-              value={newSkill.level}
-              onChange={handleInputChange}
-              className="w-32"
-            />
-            <span>{newSkill.level}%</span>
-            <button
-              onClick={handleAddSkill}
-              className="flex items-center px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-            >
-              <FaPlus className="mr-2" size={18} />
-              Add
-            </button>
           </div>
         </div>
       </div>

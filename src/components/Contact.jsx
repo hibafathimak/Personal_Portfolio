@@ -38,7 +38,7 @@ const Contact = () => {
       setEmail("");
       setMessage("");
     } catch (error) {
-      console.error("Error sending message: ", error);
+      console.error(error);
       toast.error("Failed to send message. Please try again.");
     } finally {
       setLoading(false);

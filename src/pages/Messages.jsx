@@ -16,7 +16,7 @@ const Messages = () => {
       console.log(res);
 
       if (res.status === 200) {
-        setMessages(res.data);
+        setMessages(res.data.reverse());
       }
     } catch (error) {
       console.log(error);
@@ -59,22 +59,24 @@ const Messages = () => {
               {messages.map((message) => (
                 <div
                   key={message._id}
-                  className="flex justify-between items-center border-b last:border-0 pb-3 last:pb-0"
+                  className="flex flex-col md:flex-row justify-between items-start md:items-center border-b last:border-0 pb-3 last:pb-0"
                 >
-                  <div>
+                  <div className="mb-2 md:mb-0">
                     <h3 className="font-medium">{message.message}</h3>
                     <p className="text-sm text-gray-400">{message.email}</p>
                     <p className="text-sm text-gray-400">{message.name}</p>
                   </div>
-                  <div className="flex items-center space-x-4">
-                    <span className="text-sm text-gray-400">
+                  <div className="flex flex-col md:flex-row md:items-center md:space-x-4">
+                    <span className="text-sm text-gray-400 mb-2 md:mb-0">
                       {formatDate(message.date)}
                     </span>
                     <button
                       onClick={() => handleDelete(message._id)}
-                      className="p-2 bg-red-600 text-white rounded-full hover:bg-red-700"
+                      className="p-2 w-fit bg-red-600 text-white rounded-full hover:bg-red-700 flex items-center"
                     >
-                      <FaTrash className="w-4 h-4" />
+ <span className='md:hidden mr-1'>Delete</span>
+
+                      <FaTrash/>
                     </button>
                   </div>
                 </div>

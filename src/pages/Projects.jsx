@@ -12,6 +12,7 @@ const Projects = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filter, setFilter] = useState("All Projects");
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const projectsPerPage = 8;
 
@@ -26,6 +27,8 @@ const Projects = () => {
       console.log(projects);
     } catch (error) {
       console.log(error);
+    }finally{
+      setLoading(false)
     }
   };
 
@@ -70,6 +73,9 @@ const Projects = () => {
     <div className="bg-[#0A1817] text-white min-h-screen flex flex-col">
       <NavBar />
       <div className="py-10 px-4 min-h-screen">
+      {loading ? (
+          <p className="text-gray-400 text-center">Loading projects...</p>
+        ) : (
         <div className="flex flex-col sm:flex-row justify-between items-center mb-8">
           <div className="flex justify-center mb-4 sm:mb-0">
             <button
@@ -116,10 +122,11 @@ const Projects = () => {
             type="text"
             value={searchTerm}
             onChange={handleSearch}
-            placeholder="Search by technology (e.g., React, MongoDB)"
+            placeholder="Search by technology (e.g : React, MongoDB)"
             className="px-3 py-2 bg-[#0A1817] mb-4 sm:mb-0 border min-w-[270px] sm:min-w-[400px] border-[#2A6463] rounded-3xl text-white focus:outline-none focus:ring-2 focus:ring-[#2A6463]"
           />
         </div>
+      )}
 
         <div className="flex flex-wrap justify-center gap-6">
           {currentProjects?.map((project, index) => (
