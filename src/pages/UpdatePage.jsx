@@ -174,13 +174,12 @@ const Projects = () => {
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold">Projects</h1>
           <button
-  onClick={() => handleShowModal()}
-  className="bg-[#5DA49B] text-white py-2 px-4 rounded-full flex items-center"
->
-  <FaPlus className="md:mr-2" />
-  <span className="hidden md:block">New Project</span>
-</button>
-
+            onClick={() => handleShowModal()}
+            className="bg-[#5DA49B] text-white py-2 px-4 rounded-full flex items-center"
+          >
+            <FaPlus className="md:mr-2" />
+            <span className="hidden md:block">New Project</span>
+          </button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -225,41 +224,35 @@ const Projects = () => {
                 {isEdit ? "Edit Project" : "Add New Project"}
               </h2>
 
-
               <label className="cursor-pointer mb-4">
-  <input
-    type="file"
-    accept="image/*"
-    onChange={(e) => {
-      const file = e.target.files[0];
-      if (file) {
-        setProjectDetails({ ...projectDetails, image: file });
-        setPreview(file); // Update the preview immediately after the image is selected
-      }
-    }}
-    style={{ display: "none" }}
-  />
-  
-  {projectDetails.image || preview ? (
-    <img
-      src={
-        isEdit
-          ? `${SERVER_URL}/uploads/${projectDetails.image}`
-          : URL.createObjectURL(preview || projectDetails.image)
-      }
-      className="h-48 w-full object-cover rounded-md mb-4"
-    />
-  ) : (
-    <div className="text-gray-400 text-3xl border-2 border-dashed border-gray-400 rounded-md h-48 w-full flex justify-center items-center mb-4">
-      <FaUpload />
-    </div>
-  )}
-</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      setProjectDetails({ ...projectDetails, image: file });
+                      setPreview(file);
+                    }
+                  }}
+                  style={{ display: "none" }}
+                />
 
-
-
-
-
+                {projectDetails.image || preview ? (
+                  <img
+                    src={
+                      isEdit
+                        ? `${SERVER_URL}/uploads/${projectDetails.image}`
+                        : URL.createObjectURL(preview || projectDetails.image)
+                    }
+                    className="h-48 w-full object-cover rounded-md mb-4"
+                  />
+                ) : (
+                  <div className="text-gray-400 text-3xl border-2 border-dashed border-gray-400 rounded-md h-48 w-full flex justify-center items-center mb-4">
+                    <FaUpload />
+                  </div>
+                )}
+              </label>
 
               <input
                 className="form-control bg-[#0A1817] border rounded-md p-2 w-full mb-2 text-white placeholder-gray-200"
