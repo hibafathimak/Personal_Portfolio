@@ -213,21 +213,21 @@ const Projects = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project) => (
+          {projects?.map((project) => (
             <div
-              key={project._id}
+              key={project?._id}
               className="bg-[#0A1817] border border-gray-700 rounded-lg p-6 hover:shadow-lg transition-shadow"
             >
               <img
-                src={project.image}
+                src={project?.image}
                 alt="project"
                 className="h-48 w-full object-cover mb-4 rounded-md"
               />
               <h3 className="text-2xl font-bold text-white mb-2">
-                {project.name}
+                {project?.name}
               </h3>
               <p className="text-gray-400 mb-4 h-20 overflow-hidden">
-                {project.description}
+                {project?.description}
               </p>
               <div className="flex space-x-2">
                 <button
@@ -237,7 +237,7 @@ const Projects = () => {
                   <FaEdit className="mr-2" /> Edit
                 </button>
                 <button
-                  onClick={() => handleDeleteProject(project._id)}
+                  onClick={() => handleDeleteProject(project?._id)}
                   className="bg-red-500 text-white py-2 px-4 rounded-full flex items-center"
                 >
                   <FaTrash className="mr-2" /> Delete
