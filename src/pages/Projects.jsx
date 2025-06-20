@@ -210,7 +210,7 @@ const Projects = () => {
             </h2>
             <div className="flex justify-center items-center">
               <img
-                src={`${SERVER_URL}/uploads/${selectedProject.image}`}
+                src={selectedProject.image}
                 className="w-auto h-auto lg:h-[300px] rounded-lg mb-6"
               />
             </div>
