@@ -30,46 +30,48 @@ const Skills = () => {
     setCategory(categoryName);
   };
 
+  // Filter skills for the current category
+  const filteredSkills = skills.filter((skill) => skill.category === category);
+
   return (
     <div className="px-2 md:px-12 lg:px-32">
       <h1 className="text-4xl font-extrabold text-center mb-10">
         Skills
       </h1>
-      <div className="flex flex-col lg:flex-row justify-between items-center space-y-6 lg:space-y-0 lg:space-x-6">
-        <div className="grid grid-cols-2 gap-6 w-full lg:w-1/2">
-          {["Frontend", "Backend", "Tools", "Soft Skills"].map((cat) => (
-            <div
-              key={cat}
-              onClick={() => handleCategoryClick(cat)}
-              className={`border cursor-pointer p-2 md:p-6 rounded-lg flex flex-col items-center space-y-4 transition ${
-                category === cat
-                  ? "bg-[#4D8685] text-white"
-                  : "hover:bg-[#4D8685] hover:text-white"
-              }`}
-            >
-              {cat === "Frontend" && <FaWandMagicSparkles className="text-4xl" />}
-              {cat === "Backend" && <FaServer className="text-4xl" />}
-              {cat === "Tools" && <FaTools className="text-4xl" />}
-              {cat === "Soft Skills" && <FaUsers className="text-4xl" />}
-              <p className="text-sm md:text-lg font-semibold">{cat}</p>
-            </div>
-          ))}
+      {loading ? (
+        <div className="flex items-center justify-center">
+          <div className="w-6 h-6 border-4 border-teal-500 border-dashed rounded-full animate-spin"></div>
+          <span className="ml-4 text-gray-500">Loading skills...</span>
         </div>
-
-        <div className="w-full lg:w-1/2 border rounded-lg">
-          <h3 className="text-xl font-bold p-5">{category}</h3>
-          <hr />
-          <div className="space-y-4 p-6">
-            {loading ? (
-              <div className="flex items-center justify-center">
-                <div className="w-6 h-6 border-4 border-teal-500 border-dashed rounded-full animate-spin"></div>
-                <span className="ml-4 text-gray-500">Loading skills...</span>
+      ) : (
+        <div className="flex flex-col lg:flex-row justify-between items-center space-y-6 lg:space-y-0 lg:space-x-6">
+          <div className="grid grid-cols-2 gap-6 w-full lg:w-1/2">
+            {["Frontend", "Backend", "Tools", "Soft Skills"].map((cat) => (
+              <div
+                key={cat}
+                onClick={() => handleCategoryClick(cat)}
+                className={`border cursor-pointer p-2 md:p-6 rounded-lg flex flex-col items-center space-y-4 transition ${
+                  category === cat
+                    ? "bg-[#4D8685] text-white"
+                    : "hover:bg-[#4D8685] hover:text-white"
+                }`}
+              >
+                {cat === "Frontend" && <FaWandMagicSparkles className="text-4xl" />}
+                {cat === "Backend" && <FaServer className="text-4xl" />}
+                {cat === "Tools" && <FaTools className="text-4xl" />}
+                {cat === "Soft Skills" && <FaUsers className="text-4xl" />}
+                <p className="text-sm md:text-lg font-semibold">{cat}</p>
               </div>
-            ) : (
-              skills
-                .filter((skill) => skill.category === category)
-                .map((skill) => (
-                  <div key={skill.name}>
+            ))}
+          </div>
+
+          <div className="w-full lg:w-1/2 border rounded-lg">
+            <h3 className="text-xl font-bold p-5">{category}</h3>
+            <hr />
+            <div className="space-y-4 p-6">
+              {filteredSkills.length > 0 ? (
+                filteredSkills.map((skill) => (
+                  <div key={skill._id || skill.name}>
                     <p className="text-sm">{skill.name}</p>
                     <div className="w-full bg-gray-700 h-2 rounded overflow-hidden">
                       <div
@@ -80,10 +82,15 @@ const Skills = () => {
                     </div>
                   </div>
                 ))
-            )}
+              ) : (
+                <p className="text-gray-500 text-center py-4">
+                  No skills found for {category}
+                </p>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
