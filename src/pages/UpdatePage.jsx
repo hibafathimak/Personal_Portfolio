@@ -219,7 +219,7 @@ const Projects = () => {
               className="bg-[#0A1817] border border-gray-700 rounded-lg p-6 hover:shadow-lg transition-shadow"
             >
               <img
-                src={`${SERVER_URL}/uploads/${project.image}`}
+                src={project.image}
                 alt="project"
                 className="h-48 w-full object-cover mb-4 rounded-md"
               />

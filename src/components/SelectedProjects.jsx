@@ -46,7 +46,7 @@ const SelectedProjects = () => {
             >
               <div className="relative h-40 m-2.5 overflow-hidden text-white rounded-t-md">
                 <img
-                  src={`${SERVER_URL}/uploads/${project.image}`}
+                  src={project.image}
                   alt={project.name}
                   className="w-full h-full object-cover"
                 />

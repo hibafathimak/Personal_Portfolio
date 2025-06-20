@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import logo from '../assets/logo.png';
-import data from '../assets/data';  
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import logo from "../assets/logo.png";
+import data from "../assets/data";
 
 const NavBar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { contactInfo } = data; 
+  const { contactInfo } = data;
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -15,23 +15,19 @@ const NavBar = () => {
     <div className="w-full flex flex-col lg:flex-row justify-between items-center px-4 lg:px-20 py-4">
       <div className="flex justify-between items-center w-full lg:w-auto">
         <Link to="/login">
-          <img
-            src={logo}
-            className="rounded-full h-12 lg:h-14"
-          />
+          <img src={logo} className="rounded-full h-12 lg:h-14" />
         </Link>
         <button
           className="text-white text-3xl lg:hidden focus:outline-none"
           onClick={toggleMenu}
         >
-          <i className={`fa-solid ${menuOpen ? 'fa-times' : 'fa-bars'}`}></i>
+          <i className={`fa-solid ${menuOpen ? "fa-times" : "fa-bars"}`}></i>
         </button>
       </div>
 
-      
       <div
         className={`${
-          menuOpen ? 'flex' : 'hidden'
+          menuOpen ? "flex" : "hidden"
         } lg:flex lg:border-[0.2px] rounded-full lg:py-1 border-gray-500 xl:flex flex-col xl:flex-row items-center mt-4 xl:mt-0 w-full xl:w-auto`}
       >
         <ul className="flex flex-col lg:flex-row justify-center lg:justify-evenly text-center lg:text-left w-full text-white">
@@ -42,17 +38,35 @@ const NavBar = () => {
             <Link to="/projects">Projects</Link>
           </li>
           <li className="px-10 py-2 rounded-3xl hover:bg-[#426A6F] text-xl">
-            <Link to={"/#about"}>About Me</Link>
+            <Link to="/"
+              onClick={() => {
+                setTimeout(() => {
+                  document.getElementById("about")?.scrollIntoView({
+                    behavior: "smooth",
+                  });
+                }, 100);
+              }}>About Me</Link>
           </li>
           <li className="px-10 py-2 rounded-3xl hover:bg-[#426A6F] text-xl">
-            <Link to={"/#contact"}>Contact</Link>
+            <Link
+              to="/"
+              onClick={() => {
+                setTimeout(() => {
+                  document.getElementById("contact")?.scrollIntoView({
+                    behavior: "smooth",
+                  });
+                }, 100);
+              }}
+            >
+              Contact
+            </Link>
           </li>
         </ul>
       </div>
 
       <div
         className={`${
-          menuOpen ? 'flex' : 'hidden'
+          menuOpen ? "flex" : "hidden"
         } lg:flex space-x-4 lg:space-x-10 text-white text-lg lg:text-2xl mt-4 lg:mt-0`}
       >
         <div>

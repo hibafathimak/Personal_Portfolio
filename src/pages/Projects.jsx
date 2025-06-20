@@ -137,7 +137,7 @@ const Projects = () => {
             >
               <div className="relative h-[90%] m-2.5 mb-0 overflow-hidden text-white rounded-t-md">
                 <img
-                  src={`${SERVER_URL}/uploads/${project.image}`}
+                  src={project.image}
                   alt={project.image}
                   className="w-full h-40 object-cover"
                 />
