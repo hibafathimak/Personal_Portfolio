@@ -42,10 +42,10 @@ const NavBar = () => {
             <Link to="/projects">Projects</Link>
           </li>
           <li className="px-10 py-2 rounded-3xl hover:bg-[#426A6F] text-xl">
-            <a href="#about">About Me</a>
+            <Link to={"/#about"}>About Me</Link>
           </li>
           <li className="px-10 py-2 rounded-3xl hover:bg-[#426A6F] text-xl">
-            <a href="#contact">Contact</a>
+            <Link to={"/#contact"}>Contact</Link>
           </li>
         </ul>
       </div>
