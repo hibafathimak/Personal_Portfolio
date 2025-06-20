@@ -43,25 +43,27 @@ const Projects = () => {
       sourceCode,
       liveDemoLink,
     } = projectDetails;
+    
     if (
       name &&
       description &&
       technologies &&
       category &&
       sourceCode &&
-      liveDemoLink
+      liveDemoLink &&
+      image 
     ) {
       const reqBody = new FormData();
-      if (name) reqBody.append("name", name);
-      if (description) reqBody.append("description", description);
-      if (technologies) reqBody.append("technologies", technologies);
-      if (category) reqBody.append("category", category);
-      if (image) reqBody.append("image", image);
-      if (sourceCode) reqBody.append("sourceCode", sourceCode);
-      if (liveDemoLink) reqBody.append("liveDemoLink", liveDemoLink);
-      const reqHeader = {
-        "Content-Type": "multipart/form-data",
-      };
+      reqBody.append("name", name);
+      reqBody.append("description", description);
+      reqBody.append("technologies", technologies);
+      reqBody.append("category", category);
+      reqBody.append("image", image); 
+      reqBody.append("sourceCode", sourceCode);
+      reqBody.append("liveDemoLink", liveDemoLink);
+      
+      const reqHeader = {};
+      
       try {
         const result = await addProjectAPI(reqBody, reqHeader);
         if (result.status === 200) {
@@ -73,7 +75,7 @@ const Projects = () => {
         console.log(error);
       }
     } else {
-      alert("Please fill in all the fields.");
+      alert("Please fill in all the fields including uploading an image.");
     }
   };
 
@@ -88,6 +90,7 @@ const Projects = () => {
       sourceCode,
       liveDemoLink,
     } = projectDetails;
+    
     if (
       name &&
       description &&
@@ -97,16 +100,22 @@ const Projects = () => {
       liveDemoLink
     ) {
       const reqBody = new FormData();
-      if (name) reqBody.append("name", name);
-      if (description) reqBody.append("description", description);
-      if (technologies) reqBody.append("technologies", technologies);
-      if (category) reqBody.append("category", category);
-      if (image) reqBody.append("image", image);
-      if (sourceCode) reqBody.append("sourceCode", sourceCode);
-      if (liveDemoLink) reqBody.append("liveDemoLink", liveDemoLink);
-      const reqHeader = {
-        "Content-Type": "multipart/form-data",
-      };
+      reqBody.append("name", name);
+      reqBody.append("description", description);
+      reqBody.append("technologies", technologies);
+      reqBody.append("category", category);
+      
+      if (image instanceof File) {
+        reqBody.append("image", image);
+      } else if (typeof image === 'string' && image) {
+        reqBody.append("image", image);
+      }
+      
+      reqBody.append("sourceCode", sourceCode);
+      reqBody.append("liveDemoLink", liveDemoLink);
+      
+      const reqHeader = {};
+      
       try {
         const result = await updateProjectAPI(_id, reqBody, reqHeader);
         if (result.status === 200) {
@@ -140,8 +149,21 @@ const Projects = () => {
   const handleShowModal = (project = null) => {
     setIsEdit(!!project);
     setShowModal(true);
-    setProjectDetails(
-      project || {
+    
+    if (project) {
+      setProjectDetails({
+        _id: project._id,
+        name: project.name,
+        description: project.description,
+        technologies: project.technologies,
+        category: project.category,
+        image: project.image, 
+        sourceCode: project.sourceCode,
+        liveDemoLink: project.liveDemoLink,
+      });
+      setPreview(`${SERVER_URL}/uploads/${project.image}`);
+    } else {
+      setProjectDetails({
         name: "",
         description: "",
         technologies: "",
@@ -149,9 +171,9 @@ const Projects = () => {
         image: "",
         sourceCode: "",
         liveDemoLink: "",
-      }
-    );
-    setPreview(project ? `${SERVER_URL}/uploads/${project.image}` : "");
+      });
+      setPreview("");
+    }
   };
 
   const handleCloseModal = () => {
@@ -166,6 +188,14 @@ const Projects = () => {
       liveDemoLink: "",
     });
     setPreview("");
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setProjectDetails({ ...projectDetails, image: file });
+      setPreview(URL.createObjectURL(file));
+    }
   };
 
   return (
@@ -228,23 +258,14 @@ const Projects = () => {
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={(e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                      setProjectDetails({ ...projectDetails, image: file });
-                      setPreview(file);
-                    }
-                  }}
+                  onChange={handleImageChange}
                   style={{ display: "none" }}
                 />
 
-                {projectDetails.image || preview ? (
+                {preview ? (
                   <img
-                    src={
-                      isEdit
-                        ? `${SERVER_URL}/uploads/${projectDetails.image}`
-                        : URL.createObjectURL(preview || projectDetails.image)
-                    }
+                    src={preview}
+                    alt="Preview"
                     className="h-48 w-full object-cover rounded-md mb-4"
                   />
                 ) : (
